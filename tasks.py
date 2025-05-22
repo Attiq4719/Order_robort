@@ -38,6 +38,7 @@ class order_robots_from_RobotSpareBin:
 
     def handle_modal(self):
         """Handles the modal dialog for accepting cookies"""
+        time.sleep(1)
         self.browser.click_button("//button[@class = 'btn btn-dark']")
 
     def get_order(self):
@@ -53,24 +54,19 @@ class order_robots_from_RobotSpareBin:
         self.browser.find_element(f'//div[@class="stacked"]//label[@for="id-body-{order["Body"]}"]').click()
         self.browser.input_text("//input[@placeholder='Enter the part number for the legs']", order["Legs"])
         self.browser.input_text("//input[@id='address']", order["Address"])
-        self.browser.scroll_element_into_view("//button[@id='order']")
-        self.browser.wait_until_element_is_visible("//button[@id='order']",timeout=10)
-        self.browser.wait_until_element_is_enabled("//button[@id='order']",timeout=10)
-        # self.browser.wait_until_element_is_visible("//button[@id='order']",timeout=10)
-        # if self.browser.does_page_contain_element("//button[@id='order']"):
-        #     element = self.browser.find_element("//button[@id='order']")
-        #     self.browser.execute_javascript("document.querySelector('#order').scrollIntoView(true);")
+        self.browser.capture_page_screenshot(f"output/before_scrol_screenshot_{order['Order number']}.png")
+        if self.browser.does_page_contain_element("//button[@id='order']"):
+            # element = self.browser.find_element("//button[@id='order']")
+            self.browser.execute_javascript("window.scrollTo(0, document.body.scrollHeight);")
+            # self.browser.execute_javascript("document.querySelector('#order').scrollIntoView(true);")
         self.browser.click_button("//button[@id='order']")
         # Check if the order was successful
         while self.browser.is_element_visible("//div[@class='alert alert-danger']"):
             self.browser.capture_page_screenshot(f"output/before_scroll_screenshot_{order['Order number']}.png")
-            self.browser.scroll_element_into_view("//button[@id='order']")
-            self.browser.wait_until_element_is_visible("//button[@id='order']",timeout=10)
-            self.browser.wait_until_element_is_enabled("//button[@id='order']",timeout=10)
-            self.browser.capture_page_screenshot(f"output/after_scroll_screenshot_{order['Order number']}.png")
-            # if self.browser.does_page_contain_element("//button[@id='order']"):
-            #     element = self.browser.find_element("//button[@id='order']")
-            #     self.browser.execute_javascript("document.querySelector('#order').scrollIntoView(true);")
+            if self.browser.does_page_contain_element("//button[@id='order']"):
+                self.browser.execute_javascript("window.scrollTo(0, document.body.scrollHeight);")
+                # element = self.browser.find_element("//button[@id='order']")
+                # self.browser.execute_javascript("document.querySelector('#order').scrollIntoView(true);")
             self.browser.click_button("//button[@id='order']")
 
     def store_receipt_as_pdf(self,order_number):
