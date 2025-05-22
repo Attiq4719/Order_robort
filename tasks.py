@@ -56,17 +56,15 @@ class order_robots_from_RobotSpareBin:
         self.browser.input_text("//input[@id='address']", order["Address"])
         self.browser.capture_page_screenshot(f"output/before_scrol_screenshot_{order['Order number']}.png")
         if self.browser.does_page_contain_element("//button[@id='order']"):
-            # element = self.browser.find_element("//button[@id='order']")
-            self.browser.execute_javascript("window.scrollTo(0, document.body.scrollHeight);")
-            # self.browser.execute_javascript("document.querySelector('#order').scrollIntoView(true);")
+            self.browser.execute_javascript("document.querySelector('#order').scrollIntoView(true);")
+            time.sleep(2)
         self.browser.click_button("//button[@id='order']")
         # Check if the order was successful
         while self.browser.is_element_visible("//div[@class='alert alert-danger']"):
             self.browser.capture_page_screenshot(f"output/before_scroll_screenshot_{order['Order number']}.png")
             if self.browser.does_page_contain_element("//button[@id='order']"):
-                self.browser.execute_javascript("window.scrollTo(0, document.body.scrollHeight);")
-                # element = self.browser.find_element("//button[@id='order']")
-                # self.browser.execute_javascript("document.querySelector('#order').scrollIntoView(true);")
+                self.browser.execute_javascript("document.querySelector('#order').scrollIntoView(true);")
+                time.sleep(2)
             self.browser.click_button("//button[@id='order']")
 
     def store_receipt_as_pdf(self,order_number):
